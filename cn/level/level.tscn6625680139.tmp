@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://daxhwqgfdfpjw"]
+[gd_scene load_steps=22 format=4 uid="uid://daxhwqgfdfpjw"]
 
 [ext_resource type="Script" uid="uid://vbdlqhutx3oc" path="res://cn/level/level.gd" id="1_i2t4f"]
 [ext_resource type="PackedScene" uid="uid://cptikdbrlurtp" path="res://cn/player/player.tscn" id="1_vonw3"]
@@ -8,8 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://p6l62o6f5gtw" path="res://oak_woods_v1.0/background/background_layer_3.png" id="5_km5ld"]
 [ext_resource type="Texture2D" uid="uid://cc4mp0ct6xi2g" path="res://oak_woods_v1.0/oak_woods_tileset.png" id="6_i2t4f"]
 [ext_resource type="PackedScene" uid="uid://vk3yc4p3vqyg" path="res://cn/build/shop.tscn" id="7_n6hdu"]
+[ext_resource type="Texture2D" uid="uid://cnvksi30oq4go" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0001.png" id="9_4axps"]
 [ext_resource type="Texture2D" uid="uid://70mk7odkhe7c" path="res://oak_woods_v1.0/decorations/circle.png" id="10_8cye3"]
+[ext_resource type="Texture2D" uid="uid://ugfd463fr4ab" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0003.png" id="10_gjby7"]
 [ext_resource type="PackedScene" uid="uid://88u30x64yuke" path="res://cn/mobs/snail/snail.tscn" id="11_2orkt"]
+[ext_resource type="Texture2D" uid="uid://c76me5ronsjvq" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0002.png" id="11_odilu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8cye3"]
 texture = ExtResource("6_i2t4f")
@@ -979,6 +982,20 @@ libraries = {
 &"": SubResource("AnimationLibrary_aicyk")
 }
 
+[node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer"]
+offset_left = 28.0
+offset_top = 23.0
+offset_right = 181.0
+offset_bottom = 72.0
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("10_gjby7")
+texture_over = ExtResource("9_4axps")
+texture_progress = ExtResource("11_odilu")
+tint_under = Color(0.208111, 0.171739, 0.151109, 1)
+tint_over = Color(0.42, 0.42, 0.42, 1)
+tint_progress = Color(1, 0.36, 0.36, 1)
+
 [node name="Mobs" type="Node2D" parent="."]
 
 [node name="Snail" parent="Mobs" instance=ExtResource("11_2orkt")]
@@ -1005,3 +1022,4 @@ occluder = SubResource("OccluderPolygon2D_8cye3")
 position = Vector2(627, 508)
 
 [connection signal="timeout" from="Light/DayNight" to="." method="_on_timer_timeout"]
+[connection signal="health_changed" from="Player" to="." method="_on_player_health_changed"]

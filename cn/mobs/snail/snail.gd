@@ -4,10 +4,11 @@ extends CharacterBody2D
 @onready var collisionAttack = $AttackDirection/AtackRange/CollisionShape2D2
 @onready var anim = $AnimatedSprite2D
 
+
 var player
 var direction 
 var damage = 20
-var health = 50
+var health = 100
 
 enum{
 	IDLE,
@@ -29,13 +30,16 @@ var state:int = 0:
 				damage_state()
 			DEATH:
 				death_state()
+	
 			
 
 func _ready() -> void:
-	GlobalSignals.connect("player_position_update", Callable(self,"_on_player_position_update"))
-	GlobalSignals.connect("player_damage", Callable(self,"_on_player_attack"))
+	GlobalSignals.connect("player_position_update", Callable(self, "_on_player_position_update"))
+	GlobalSignals.connect("player_attack_damage", Callable(self, "_on_player_attack"))
+	
 
 func _physics_process(delta: float) -> void:
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -52,7 +56,7 @@ func _on_atack_range_body_entered(_body: Node2D) -> void:
 	
 func idle_state():
 	animPlayer.play("Idle")
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(2.5).timeout
 	$AttackDirection/AtackRange/CollisionShape2D2.disabled = false
 	state = WALK
 
@@ -82,17 +86,14 @@ func damage_state():
 	animPlayer.play("Damage")
 	await animPlayer.animation_finished
 	state = IDLE
-	
-func _on_player_attack(player_attack):
-	health -= player_attack
-	if health <= 0:
-		state = DEATH
-	else:
-		state = DAMAGE
-	print(health)
-	
 
-
-func _on_hit_damage_area_entered(area: Area2D) -> void:
+func _on_hit_damage_area_entered(_area: Area2D) -> void:
+	print("hi ia am snaild")
 	GlobalSignals.emit_signal("attack_damage", damage)
-	
+
+func _on_mob_health_minus_health() -> void:
+	state = DEATH
+
+func _on_mob_health_damage_received() -> void:
+	state = IDLE
+	state = DAMAGE

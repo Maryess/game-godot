@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnfxfm14taba8"]
+
+[ext_resource type="Texture2D" uid="uid://ugfd463fr4ab" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0003.png" id="1_nwjcj"]
+[ext_resource type="Script" uid="uid://bw7r0jjhadmpg" path="res://cn/player/stats.gd" id="1_y6txu"]
+[ext_resource type="Texture2D" uid="uid://cnvksi30oq4go" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0001.png" id="2_y6txu"]
+[ext_resource type="Texture2D" uid="uid://c76me5ronsjvq" path="res://oak_woods_v1.0/decorations/Heart Bar/Sprite-0002.png" id="3_7ha4c"]
+
+[node name="stats" type="CanvasLayer"]
+script = ExtResource("1_y6txu")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+offset_left = 28.0
+offset_top = 23.0
+offset_right = 181.0
+offset_bottom = 72.0
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("1_nwjcj")
+texture_over = ExtResource("2_y6txu")
+texture_progress = ExtResource("3_7ha4c")
+tint_under = Color(0.208111, 0.171739, 0.151109, 1)
+tint_over = Color(0.42, 0.42, 0.42, 1)
+tint_progress = Color(1, 0.36, 0.36, 1)
+
+[node name="Stamina" type="TextureProgressBar" parent="."]
+offset_left = 26.0
+offset_top = 69.0
+offset_right = 182.0
+offset_bottom = 113.0
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("1_nwjcj")
+texture_progress = ExtResource("3_7ha4c")
+tint_progress = Color(0.596149, 0.914394, 0.985686, 1)
+
+[node name="Regeneration" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[connection signal="timeout" from="Regeneration" to="." method="_on_regeneration_timeout"]

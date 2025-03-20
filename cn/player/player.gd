@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-signal health_changed(new_health)
-
 enum{
 	MOVE,
 	ATTACK,
@@ -10,25 +8,27 @@ enum{
 	SHIELD,
 	JUMP,
 	DAMAGE,
-	DEATH
+	DEATH,
 }
 const JUMP_VELOCITY = -300.0
 const SPEED = 100.0
 
 @onready var anim = $AnimatedSprite2D
 @onready var animPlayer = $AnimationPlayer
+@onready var stats = $stats
+@onready var healthText = $Health/HealthText
+@onready var animHealth = $Health/AnimationHealth
 
-var max_health = 100
-var health
 var gold = 0
 var state = MOVE
 var run_speed_temp = 1
-var sit = false
 var player_poss
+var damage = 10
+var block_player = false
 
 func _ready() -> void:
 	GlobalSignals.connect("attack_damage", Callable(self,"_on_damage_attack"))
-	health = max_health
+
 
 func _physics_process(delta: float) -> void:
 	match state:
@@ -50,11 +50,11 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		anim.play("Jump")
-	
+	## Handle jump.
+	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		#velocity.y = JUMP_VELOCITY
+		#anim.play("Jump")
+
 	if velocity.y > 0:
 		anim.play("Fall")
 	
@@ -71,41 +71,58 @@ func move_state():
 	if direction:
 		velocity.x = direction * SPEED * run_speed_temp
 		if velocity.y == 0:
-			sit = false
 			if run_speed_temp == 1:
 				anim.play("Move")
 			else:
 				anim.play("Run")
+					
+				
+
 			
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-		sit = true
 		if velocity.y == 0:
 			anim.play("Idle")
 
 	if direction == -1:
 		anim.flip_h = true
+		$AttackDirection.rotation_degrees = 180
 	elif direction == 1:
 		anim.flip_h = false
+		$AttackDirection.rotation_degrees = 0
 
-	if Input.is_action_pressed("run"):
+	if Input.is_action_pressed("run") and not block_player:
 		run_speed_temp = 2
+		stats.stamina -= stats.run_stamina
 	else:
 		run_speed_temp = 1
 		 
 	if Input.is_action_just_pressed("attack"):
-		state = ATTACK
+		if block_player == false:
+			stats.stamina_cost = stats.attack_stamina
+			if stats.stamina > stats.stamina_cost:
+				state = ATTACK
 	
 	if Input.is_action_just_pressed("big_attack"):
 		state = BIG_ATTACK
 	
 	if Input.is_action_just_pressed("slide"):
-		state = SLIDE
-		
+		if block_player == false:
+			stats.stamina_cost = stats.attack_stamina
+			if stats.stamina > stats.stamina_cost:
+				if run_speed_temp == 1:
+					anim.play("Sit")
+				else:
+					state = SLIDE
+	
 	if Input.is_action_pressed("shield"):
-		state = SHIELD
+		if stats.stamina > 1:
+			state = SHIELD
 	
 
+func run_state():
+	anim.play("Run")
+	
 
 func attack_state():
 	velocity.x = 0
@@ -120,25 +137,23 @@ func big_attack_state():
 	state = MOVE
 	
 func slide_state():
-	if sit == true:
-		anim.play("Sit")
-	else:
-		anim.play("Slide")
+	animPlayer.play("Slide")
 	await anim.animation_finished
 	state = MOVE
 
 func shield_state():
+	stats.stamina -= stats.block_stamina
 	velocity.x = 0
 	anim.play("Shield")
 	if  Input.is_action_just_released("shield"):
 		state = MOVE
 
 func death_state():
-		velocity.x= 0
-		anim.play("Death")
-		await anim.animation_finished
-		queue_free()
-		await get_tree().create_timer(2).timeout
+	velocity.x= 0
+	anim.play("Death")
+	await anim.animation_finished
+	queue_free()
+	await get_tree().create_timer(2).timeout
 		
 	
 func damage_state():
@@ -156,12 +171,19 @@ func _on_damage_attack(damage_attack):
 		damage_attack = 0
 	else:
 		state = DAMAGE
-	health -= damage_attack
-	if health <= 0:
-		health = 0
+	stats.health -= damage_attack
+	if stats.health <= 0:
+		stats.health = 0
 		state = DEATH
 	else:
 		state = DAMAGE
-		
-	emit_signal("health_changed", health)
-	print(health)
+
+func _on_hit_damage_area_entered(area: Area2D) -> void:
+	print("hi")
+	GlobalSignals.emit_signal("player_attack_damage", damage)
+
+
+func _on_stats_no_stamina() -> void:
+	block_player = true
+	await  get_tree().create_timer(2).timeout
+	block_player = false

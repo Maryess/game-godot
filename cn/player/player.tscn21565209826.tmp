@@ -1103,10 +1103,10 @@ tracks/0/path = NodePath("Health/HealthText:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.00362948, 0.151228, 0.264952, 0.38533, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.00362948, 0.151228, 0.264952, 0.38533, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-4, -25), Vector2(-4, -25), Vector2(-4, -29), Vector2(-4, -33), Vector2(-4, -34), Vector2(-4, -25)]
+"values": [Vector2(-7, -25), Vector2(-7, -29), Vector2(-7, -33), Vector2(-7, -34), Vector2(-7, -25)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1115,10 +1115,10 @@ tracks/1/path = NodePath("Health/HealthText:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.145179, 0.260718, 0.307288, 0.382475),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.145179, 0.260718, 0.393194),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(0.0913222, 0.167632, 0.0617261, 1), Color(0.266667, 0.431373, 0.203922, 0.72549), Color(0.266667, 0.431373, 0.203922, 0.376471), Color(1, 1, 1, 0.866667), Color(1, 1, 1, 0)]
+"values": [Color(0.266963, 0.433107, 0.202669, 1), Color(0.266667, 0.431373, 0.203922, 0.72549), Color(0.266667, 0.431373, 0.203922, 0.376471), Color(0.266667, 0.431373, 0.203922, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_7esog"]
@@ -1172,7 +1172,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0.00362948, 0.151228, 0.264952, 0.38533, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-4, -25), Vector2(-4, -29), Vector2(-4, -33), Vector2(-4, -34), Vector2(-7, -25)]
+"values": [Vector2(-7, -25), Vector2(-7, -29), Vector2(-7, -33), Vector2(-7, -34), Vector2(-7, -25)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3mbot"]
@@ -1217,7 +1217,7 @@ shape = SubResource("CapsuleShape2D_kqu6x")
 position = Vector2(0, -13)
 scale = Vector2(1, 0.990196)
 sprite_frames = SubResource("SpriteFrames_oul6g")
-animation = &"Idle"
+animation = &"Attack"
 autoplay = "Idle"
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -1249,9 +1249,9 @@ libraries = {
 
 [node name="HealthText" type="Label" parent="Health"]
 modulate = Color(0.796603, 0.154342, 0.190433, 1)
-offset_left = -4.0
+offset_left = -7.0
 offset_top = -25.0
-offset_right = 53.0
+offset_right = 50.0
 offset_bottom = 44.0
 scale = Vector2(0.11, 0.11)
 theme_override_font_sizes/font_size = 50

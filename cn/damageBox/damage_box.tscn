@@ -1,19 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://bpoggq52rw7rs"]
+[gd_scene load_steps=4 format=3 uid="uid://bpoggq52rw7rs"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_16ehb"]
+[ext_resource type="Script" uid="uid://biorsn2iaedbq" path="res://cn/damageBox/damage_box.gd" id="1_jfrxb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jfrxb"]
-radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qsmna"]
+radius = 8.0
 
 [node name="DamageBox" type="Node2D"]
+script = ExtResource("1_jfrxb")
 
-[node name="HeartDamage" type="Area2D" parent="."]
+[node name="HurtDamage" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HeartDamage"]
-shape = SubResource("CircleShape2D_16ehb")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtDamage"]
+shape = SubResource("CircleShape2D_jfrxb")
 
 [node name="HitDamage" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDamage"]
-position = Vector2(21, 0)
-shape = SubResource("CircleShape2D_jfrxb")
+position = Vector2(20, 0)
+shape = SubResource("CircleShape2D_qsmna")

@@ -77,8 +77,8 @@ big_attack={
 2d_physics/layer_1="layer"
 2d_physics/layer_2="player"
 2d_physics/layer_3="other"
-2d_physics/layer_5="playerBox"
-2d_physics/layer_6="enemyBox"
+2d_physics/layer_5="playerHurtBox"
+2d_physics/layer_6="enemyHurtBox"
 
 [rendering]
 
